@@ -1,0 +1,14 @@
+# .gitignore
+
+# Ignore node_modules for all workspaces
+**/node_modules
+
+# Ignore generated files
+/dist
+/build
+
+# Ignore environment-specific files
+.env
+
+# Ignore Visual Studio Code settings
+.vscode
