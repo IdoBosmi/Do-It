@@ -15,7 +15,7 @@ const App: React.FC = () => {
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([
     {
       id:1,
-      title: "Do fvsdjbvjsdbvjkdsb"
+      title: "Do Sport!"
     },
     {
       id:3,
