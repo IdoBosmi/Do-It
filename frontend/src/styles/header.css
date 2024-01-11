@@ -1,0 +1,52 @@
+/* header.css */
+
+/* Overall styling for the header container */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #3498db; /* Use your desired color */
+    color: #ffffff; /* Text color */
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+  
+  /* Styling for the title on the left side */
+  .title {
+    margin-right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  /* Styling for the logged-in user section */
+  .logged-in-section {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Styling for the username */
+  .username {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  /* Styling for the logout button */
+  .logout-button {
+    background-color: #e74c3c; /* Use your desired color */
+    color: #ffffff; /* Text color */
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Styling for the login and signup buttons */
+  .login-button,
+  .signup-button {
+    background-color: #2ecc71; /* Use your desired color */
+    color: #ffffff; /* Text color */
+    padding: 5px 10px;
+    margin-right: 10px;
+    border: none;
+    cursor: pointer;
+  }
+  

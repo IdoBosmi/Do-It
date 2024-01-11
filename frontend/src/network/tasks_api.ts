@@ -1,6 +1,7 @@
 import { TaskModel } from "../models/task";
+import { UserModel } from "../models/user";
 
-async function fetchData(input:RequestInfo, init?: RequestInit) {
+async function fetchData(input: RequestInfo, init?: RequestInit) {
     const response = await fetch(input, init);
 
     if (response.ok) {
@@ -11,21 +12,78 @@ async function fetchData(input:RequestInfo, init?: RequestInit) {
     }
 }
 
-export async function fetchTasks(): Promise<TaskModel[]> {
+//Users
 
-    const response = await fetchData("/api/tasks", {method: "GET"});
+export async function getLoggedInUser(): Promise<UserModel> {
+    const response = await fetchData("/api/users", { method: "GET" });
+    return response.json();
+}
+
+
+export interface SignUpCredentials {
+    username: string,
+    email: string,
+    password: string
+}
+
+export async function signUp(credentials: SignUpCredentials): Promise<UserModel> {
+
+    const response = await fetchData("/api/users/signup", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(credentials)
+    })
+
     return response.json();
 
 }
 
-interface TaskInput {
+
+export interface LoginCredentials {
+    username: string,
+    password: string
+}
+
+export async function login(credentials: LoginCredentials): Promise<UserModel> {
+
+    const response = await fetchData("/api/users/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(credentials)
+    })
+
+    return response.json();
+}
+
+
+export async function logout() {
+    await fetchData("api/users/logout", { method: "POST" });
+}
+
+
+
+
+// Tasks
+
+export async function fetchTasks(): Promise<TaskModel[]> {
+
+    const response = await fetchData("/api/tasks", { method: "GET" });
+    return response.json();
+
+}
+
+export interface TaskInput {
     title: string
 }
 
 
-export async function createTask(task : TaskInput): Promise<TaskModel> {
+export async function createTask(task: TaskInput): Promise<TaskModel> {
 
-    const response = await fetchData("/api/tasks",{
+    const response = await fetchData("/api/tasks", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -34,17 +92,18 @@ export async function createTask(task : TaskInput): Promise<TaskModel> {
     });
 
     return response.json();
-} 
-
-
-
-export async function delteTask(taskId: string){
-    await fetchData("/api/tasks/"+taskId, {method: "DELETE"});
 }
 
 
-export async function updateTask(taskId: string, task:TaskInput): Promise<TaskModel>{
-    const response = await fetchData("/api/tasks/" +taskId, {
+
+export async function deleteTask(taskId: string) {
+    console.log(taskId)
+    await fetchData("/api/tasks/" + taskId, { method: "DELETE" });
+}
+
+
+export async function updateTask(taskId: string, task: TaskInput): Promise<TaskModel> {
+    const response = await fetchData("/api/tasks/" + taskId, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"

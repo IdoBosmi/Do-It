@@ -1,0 +1,35 @@
+/* taskList.css */
+
+/* Overall styling for the task list container */
+.TaskList {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+  }
+  
+  /* Styling for each task item */
+  .TaskItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd; /* Border color */
+    background-color: #f9f9f9; /* Background color */
+  }
+  
+  /* Styling for task title */
+  .TaskItem span {
+    flex-grow: 1;
+    margin-right: 10px;
+  }
+  
+  /* Styling for action buttons (Edit, Complete, Delete) */
+  .TaskItem button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  /* Add more specific styles as needed */
+  
