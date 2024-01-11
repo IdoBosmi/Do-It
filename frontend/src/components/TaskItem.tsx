@@ -1,16 +1,11 @@
 import React from 'react';
-
-interface Task {
-  id: number;
-  title: string;
-  // Add other task properties as needed
-}
+import { TaskModel } from '../models/task';
 
 interface TaskItemProps {
-  task: Task;
+  task: TaskModel;
 }
 
-const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
+const TaskItem= ({ task } : TaskItemProps) => {
   return (
     <div className="TaskItem">
       <span>{task.title}</span>

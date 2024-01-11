@@ -1,59 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import TaskList from './components/TaskList';
-import './App.css';
+import * as TaskAPI from "./network/tasks_api";
+import { TaskModel } from './models/task';
 
-interface Task {
-  id: number;
-  title: string;
-  // Add other task properties as needed
-}
 
-const App: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [filteredTasks, setFilteredTasks] = useState<Task[]>([
-    {
-      id:1,
-      title: "Do Sport!"
-    },
-    {
-      id:3,
-      title: "Do launddsadsaet"
+function App() {
+
+  const [tasks, setTasks] = useState<TaskModel[]>([]);
+
+  useEffect(()=>{
+    async function loadTasks() {
+      try { 
+        const tasks = await TaskAPI.fetchTasks();
+        setTasks(tasks);
+      }
+      catch (error){
+        console.log(error);  
+      }
     }
-  ]);
-
-
-  /*
-  useEffect(() => {
-    // Simulate fetching tasks from the backend
-    axios.get<Task[]>('http://localhost:3001/tasks') // Replace with your actual backend URL
-      .then((response) => {
-        setTasks(response.data);
-        setFilteredTasks(response.data);
-      })
-      .catch((error) => console.error('Error fetching tasks:', error));
+    loadTasks();
   }, []);
 
 
-  */
+ 
   const handleFilter = (filter: string) => {
     // Simulate frontend filtering based on the user's selection
     if (filter === 'Today') {
       const todayTasks = tasks.filter((task) => task);
-      setFilteredTasks(todayTasks);
+      //setFilteredTasks(todayTasks);
     } else if (filter === 'Work') {
       const workTasks = tasks.filter((task) => task);
-      setFilteredTasks(workTasks);
+     // setFilteredTasks(workTasks);
     }
     // Add more filter cases as needed
   };
+  
 
   
   return (
     <div className="App">
       <Sidebar onFilter={handleFilter} />
-      <TaskList tasks={filteredTasks} />
+      <TaskList tasks={tasks} />
     </div>
   );
 };

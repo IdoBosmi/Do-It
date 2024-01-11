@@ -1,21 +1,15 @@
-import React from 'react';
 import TaskItem from './TaskItem';
+import { TaskModel } from '../models/task';
 
-interface Task {
-  id: number;
-  title: string;
-  // Add other task properties as needed
+interface TasksProps {
+  tasks:  TaskModel[]
 }
 
-interface TaskListProps {
-  tasks: Task[];
-}
-
-const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
+const TaskList = ({ tasks }: TasksProps) => {
   return (
     <div className="TaskList">
       {tasks.map((task) => (
-        <TaskItem key={task.id} task={task} />
+        <TaskItem key={task._id} task={task} />
       ))}
     </div>
   );
