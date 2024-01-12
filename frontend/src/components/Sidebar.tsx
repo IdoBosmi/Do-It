@@ -1,4 +1,3 @@
-import React from 'react';
 import { TaskListModel } from '../models/TaskList';
 
 interface SidebarProps {
@@ -9,14 +8,15 @@ interface SidebarProps {
 const Sidebar = ({ taskLists, onTaskListClick }:SidebarProps) => {
   return (
     <div className="Sidebar">
-      <div className="TaskItem" key={"Today"} onClick={()=>onTaskListClick(null)}>
+      <h1>My Task Lists</h1>
+      <div className="ListItem" key={"Today"} onClick={()=>onTaskListClick(null)}>
           <span>Today</span>
       </div>
-      <div className="TaskItem" key={"All"} onClick={()=>onTaskListClick(null)}>
+      <div className="ListItem" key={"All"} onClick={()=>onTaskListClick(null)}>
         <span>All</span>
       </div>
       {taskLists.map((list) => (
-        <div className="TaskItem" key={list._id} onClick={()=>onTaskListClick(list)}>
+        <div className="ListItem" key={list._id} onClick={()=>onTaskListClick(list)}>
           <span>{list.title}</span>
         </div>
       ))}

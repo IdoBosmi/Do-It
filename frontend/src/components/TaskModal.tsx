@@ -1,7 +1,6 @@
 import {useState, useEffect} from 'react';
 import * as TaskAPI from '../network/tasks_api'
 import {Button, Modal} from 'react-bootstrap'
-import '../styles/loginModal.css';
 import { TaskModel } from '../models/task';
 import { TaskListModel } from '../models/TaskList';
 

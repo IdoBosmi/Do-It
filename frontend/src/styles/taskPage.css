@@ -1,0 +1,126 @@
+/* taskPage.css */
+
+/* Overall styling for the task page container */
+.taskPageDiv {
+    display: flex;
+}
+
+/* Additional styling for the content */
+.taskPageDiv > * {
+    margin: 20px;
+}
+
+/* Styling for the "Add Task" button */
+.taskPageDiv button {
+    padding: 10px;
+    cursor: pointer;
+}
+
+
+.not-logged-in-page {
+  background-color: #748DA6;
+  border-radius: 10px;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+
+/* Styling for the sidebar container */
+.Sidebar {
+    width: 25%; /* Adjust as needed */
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #F2D1D1;
+    border-radius: 10px;
+    height: 85vh;
+}
+
+/* Styling for each task item in the sidebar */
+.Sidebar .ListItem {
+    padding: 10px;
+    margin: 10px 0;
+    cursor: pointer;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+}
+
+
+/* taskList.css */
+
+/* Overall styling for the task list container */
+.TaskList {
+    display: flex;
+    flex-grow: 2;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #C6DCE4;
+    border-radius: 10px;
+}
+
+.TaskList-Header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Styling for the h1 within the TaskList header */
+.TaskList-Header h1 {
+  margin: 0; /* Remove default margin */
+}
+
+/* Styling for the button within the TaskList header */
+.TaskList-Header button {
+  margin-left: 10px; /* Adjust as needed */
+  padding: 5px 10px;
+  cursor: pointer;
+  border: 0px;
+  border-radius: 10px;
+  background-color: #00B8A9;
+}
+  
+  /* Styling for each task item */
+  .TaskList .TaskItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #FFFFFF; /* Background color */
+    border-radius: 10px;
+    height: 10%;
+  }
+  
+  /* Styling for task title */
+  .TaskList .TaskItem span {
+    flex-grow: 1;
+    margin-right: 10px;
+  }
+  
+
+  .TaskList .TaskItem button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border: 0px;
+    border-radius: 10px;
+  }
+
+  /* Styling for action buttons (Edit, Complete, Delete) */
+  .TaskItem .edit {
+    background-color:#C6DCE4;
+  }
+
+
+  .TaskItem .complete {
+    background-color:#99DDCC;
+  }
+
+  .TaskItem .delete {
+    background-color:#E23E57;
+  }
+  
+  /* Add more specific styles as needed */
+  
+
+  

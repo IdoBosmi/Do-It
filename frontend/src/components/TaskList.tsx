@@ -1,16 +1,16 @@
 import { TaskModel } from '../models/task';
 import * as TaskAPI from '../network/tasks_api';
-import '../styles/taskList.css';
 
 interface TaskListProps {
   title: string,
   tasks: TaskModel[],
   onDeleteSuccessful: (task: TaskModel) => void,
-  onEditClick: (task: TaskModel) => void
+  onEditClick: (task: TaskModel) => void,
+  onAddTaskClick: ()=>void
 }
 
 
-const TaskList = ({ tasks, onDeleteSuccessful, onEditClick, title }: TaskListProps) => {
+const TaskList = ({ tasks, onDeleteSuccessful, onEditClick, title, onAddTaskClick }: TaskListProps) => {
 
 
   const onDeleteClick = async (taskToDelete: TaskModel) => {
@@ -21,13 +21,16 @@ const TaskList = ({ tasks, onDeleteSuccessful, onEditClick, title }: TaskListPro
 
   return (
     <div className="TaskList">
-      <h1>{title}</h1>
+      <div className='TaskList-Header'>
+        <h1>{title}</h1>
+        <button onClick={onAddTaskClick}>Add Task</button>
+      </div>
       {tasks.map((task) => (
         <div className="TaskItem" key={task._id}>
           <span>{task.title}</span>
-          <button onClick={() => onEditClick(task)}>Edit</button>
-          <button onClick={() => console.log('Complete task')}>Complete</button>
-          <button onClick={() => onDeleteClick(task)}>Delete</button>
+          <button className='edit' onClick={() => onEditClick(task)}>Edit</button>
+          <button className='complete' onClick={() => console.log('Complete task')}>Complete</button>
+          <button className='delete' onClick={() => onDeleteClick(task)}>Delete</button>
         </div>
       ))}
     </div>

@@ -6,6 +6,7 @@ import { TaskModel } from "../models/task";
 import TaskModal from "../components/TaskModal";
 import Sidebar from "../components/Sidebar";
 import { TaskListModel } from "../models/TaskList";
+import "../styles/taskPage.css"
 
 interface MyTasksPageProps {
     loggedInUser: UserModel | null,
@@ -43,7 +44,7 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
         }
         loadTasks();
         loadTaskLists();
-    }, []);
+    }, [loggedInUser]);
 
 
 
@@ -74,7 +75,7 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
     }
 
     return (
-        <div>
+        <div className="taskPageDiv">
             {loggedInUser
                 ? <>
                     <Sidebar taskLists={taskLists} onTaskListClick={onTaskListClick}/>
@@ -83,8 +84,9 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
                         tasks={currentTaskList ? tasks.filter(item=> item.taskListId === currentTaskList._id) : tasks}
                         onDeleteSuccessful={onDeleteSuccessful}
                         onEditClick={onEditClick}
+                        onAddTaskClick = {() => setShowTaskModal(true)}
                     />
-                    <button onClick={() => setShowTaskModal(true)}>Add Task</button>
+                    
 
                     {showTaskModal &&
                         <TaskModal
@@ -99,9 +101,11 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
                         />
                     }
                 </>
-                : <>
-                    <h2>You are not logged in! Login or signup to start doing your tasks!</h2>
-                </>
+                : 
+                    <div className="not-logged-in-page">
+                        <h1>Welcome to DO IT website!</h1>
+                        <h2>Login or signup to start manage your tasks!</h2>
+                    </div>
 
             }
 
