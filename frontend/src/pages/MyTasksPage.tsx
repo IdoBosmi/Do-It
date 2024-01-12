@@ -4,6 +4,8 @@ import { UserModel } from "../models/user";
 import * as TaskAPI from '../network/tasks_api'
 import { TaskModel } from "../models/task";
 import TaskModal from "../components/TaskModal";
+import Sidebar from "../components/Sidebar";
+import { TaskListModel } from "../models/TaskList";
 
 interface MyTasksPageProps {
     loggedInUser: UserModel | null,
@@ -12,11 +14,24 @@ interface MyTasksPageProps {
 const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
 
 
+    const [taskLists, setTaskLists] = useState<TaskListModel[]>([]);
+    const [currentTaskList, setCurrentTaskList] = useState<TaskListModel | null>(null);
     const [tasks, setTasks] = useState<TaskModel[]>([]);
     const [showTaskModal, setShowTaskModal] = useState(false);
     const [taskToEdit, setTaskToEdit] = useState<TaskModel | null>(null);
 
+
+
     useEffect(() => {
+        async function loadTaskLists() {
+            try {
+                const taskLists = await TaskAPI.fetchTaskLists();
+                setTaskLists(taskLists);
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
         async function loadTasks() {
             try {
                 const tasks = await TaskAPI.fetchTasks();
@@ -27,8 +42,17 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
             }
         }
         loadTasks();
+        loadTaskLists();
     }, []);
 
+
+
+    const onTaskListClick = (taskList: TaskListModel | null) =>{
+        setCurrentTaskList(taskList);
+    }
+
+
+    //Tasks
 
     const onCreateSuccessful = (createdTask: TaskModel) => {
         setTasks([...tasks, createdTask]);
@@ -53,9 +77,10 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
         <div>
             {loggedInUser
                 ? <>
-                    {/* <Sidebar onFilter={handleFilter} /> */}
+                    <Sidebar taskLists={taskLists} onTaskListClick={onTaskListClick}/>
                     <TaskList
-                        tasks={tasks}
+                        title= {currentTaskList ? currentTaskList.title : "All"}
+                        tasks={currentTaskList ? tasks.filter(item=> item.taskListId === currentTaskList._id) : tasks}
                         onDeleteSuccessful={onDeleteSuccessful}
                         onEditClick={onEditClick}
                     />
@@ -63,8 +88,12 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
 
                     {showTaskModal &&
                         <TaskModal
+                            currentTaskList={currentTaskList}
                             currentTask={taskToEdit}
-                            onDismiss={() => setShowTaskModal(false)}
+                            onDismiss={() => {
+                                setShowTaskModal(false);
+                                setTaskToEdit(null);
+                            }}
                             onUpdateSuccessful={onUpdateSuccessful}
                             onCreateSuccessful={onCreateSuccessful}
                         />

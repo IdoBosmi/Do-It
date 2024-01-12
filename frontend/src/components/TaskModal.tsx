@@ -3,15 +3,17 @@ import * as TaskAPI from '../network/tasks_api'
 import {Button, Modal} from 'react-bootstrap'
 import '../styles/loginModal.css';
 import { TaskModel } from '../models/task';
+import { TaskListModel } from '../models/TaskList';
 
 interface LoginModalProps {
+    currentTaskList: TaskListModel | null,
     currentTask: TaskModel | null
     onDismiss: () => void,
     onCreateSuccessful: (task: TaskModel) => void,
     onUpdateSuccessful: (task: TaskModel) => void
 }
 
-const TaskModal = ({currentTask, onDismiss, onCreateSuccessful, onUpdateSuccessful} : LoginModalProps) =>{
+const TaskModal = ({currentTask, onDismiss, onCreateSuccessful, onUpdateSuccessful, currentTaskList} : LoginModalProps) =>{
 
     const [title, setTitle] = useState<string>("");
 
@@ -28,6 +30,9 @@ const TaskModal = ({currentTask, onDismiss, onCreateSuccessful, onUpdateSuccessf
                 const updatedTask = await TaskAPI.updateTask(currentTask._id, task);
                 onUpdateSuccessful(updatedTask);
             } else {
+                if (currentTaskList){
+                    task.taskListId = currentTaskList._id;
+                }
                 const newTask = await TaskAPI.createTask(task);
                 onCreateSuccessful(newTask);
             }

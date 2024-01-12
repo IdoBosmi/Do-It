@@ -1,15 +1,25 @@
 import React from 'react';
+import { TaskListModel } from '../models/TaskList';
 
 interface SidebarProps {
-  onFilter: (filter: string) => void;
+  taskLists: TaskListModel[]
+  onTaskListClick: (taskList: TaskListModel | null) => void
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onFilter }) => {
+const Sidebar = ({ taskLists, onTaskListClick }:SidebarProps) => {
   return (
     <div className="Sidebar">
-      <button onClick={() => onFilter('Today')}>Today</button>
-      <button onClick={() => onFilter('Work')}>Work</button>
-      {/* Add more filter buttons as needed */}
+      <div className="TaskItem" key={"Today"} onClick={()=>onTaskListClick(null)}>
+          <span>Today</span>
+      </div>
+      <div className="TaskItem" key={"All"} onClick={()=>onTaskListClick(null)}>
+        <span>All</span>
+      </div>
+      {taskLists.map((list) => (
+        <div className="TaskItem" key={list._id} onClick={()=>onTaskListClick(list)}>
+          <span>{list.title}</span>
+        </div>
+      ))}
     </div>
   );
 };

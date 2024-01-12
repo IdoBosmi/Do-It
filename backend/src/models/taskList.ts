@@ -1,6 +1,6 @@
 import { InferSchemaType, Schema, model } from "mongoose";
 
-const taskSchema = new Schema({
+const taskListScheme = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
         required: true
@@ -8,12 +8,9 @@ const taskSchema = new Schema({
     title: {
         type: String,
         required: true
-    },
-    taskListId: {
-        type: String
     }
-}, { timestamps: true });
+});
 
-type Task = InferSchemaType<typeof taskSchema>
+type TaskList = InferSchemaType<typeof taskListScheme>
 
-export default model<Task>("Task", taskSchema);
+export default model<TaskList>("TaskList", taskListScheme);

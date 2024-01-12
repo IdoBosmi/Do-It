@@ -1,3 +1,4 @@
+import { TaskListModel } from "../models/TaskList";
 import { TaskModel } from "../models/task";
 import { UserModel } from "../models/user";
 
@@ -11,6 +12,53 @@ async function fetchData(input: RequestInfo, init?: RequestInit) {
         throw Error(errorBody.error);
     }
 }
+
+//TaskLists
+
+
+export async function fetchTaskLists(): Promise<TaskListModel[]> {
+
+    const response = await fetchData("/api/taskLists", { method: "GET" });
+    return response.json();
+
+}
+
+export interface TaskListInput {
+    title: string
+}
+
+export async function createTaskList(taskList: TaskListInput): Promise<TaskListModel> {
+
+    const response = await fetchData("/api/taskLists", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(taskList)
+    });
+
+    return response.json();
+}
+
+
+
+export async function deleteTaskList(taskListId: string) {
+    await fetchData("/api/taskLists/" + taskListId, { method: "DELETE" });
+}
+
+
+export async function updateTaskList(taskListId: string, taskList: TaskListInput): Promise<TaskListModel> {
+    const response = await fetchData("/api/taskLists/" + taskListId, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(taskList)
+    });
+    return response.json();
+}
+
+
 
 //Users
 
@@ -77,7 +125,8 @@ export async function fetchTasks(): Promise<TaskModel[]> {
 }
 
 export interface TaskInput {
-    title: string
+    title: string,
+    taskListId?: string
 }
 
 

@@ -2,6 +2,7 @@ import "dotenv/config";
 import express, {NextFunction, Request, Response, request} from "express";
 import tasksRoutes from "./routes/tasks";
 import userRoutes from "./routes/users";
+import taskListsRoute from "./routes/taskLists";
 import morgan from "morgan";
 import createHttpError, {isHttpError} from "http-errors";
 import session from "express-session";
@@ -26,6 +27,8 @@ app.use(session({
     store: MongoStore.create({mongoUrl: process.env.MONGO_CONNECTION_STRING})
 }));
 
+
+app.use("/api/taskLists", taskListsRoute)
 app.use("/api/tasks", requireAuth, tasksRoutes);
 app.use("/api/users", userRoutes)
 

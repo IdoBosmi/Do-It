@@ -3,13 +3,14 @@ import * as TaskAPI from '../network/tasks_api';
 import '../styles/taskList.css';
 
 interface TaskListProps {
+  title: string,
   tasks: TaskModel[],
   onDeleteSuccessful: (task: TaskModel) => void,
   onEditClick: (task: TaskModel) => void
 }
 
 
-const TaskList = ({ tasks, onDeleteSuccessful, onEditClick }: TaskListProps) => {
+const TaskList = ({ tasks, onDeleteSuccessful, onEditClick, title }: TaskListProps) => {
 
 
   const onDeleteClick = async (taskToDelete: TaskModel) => {
@@ -20,6 +21,7 @@ const TaskList = ({ tasks, onDeleteSuccessful, onEditClick }: TaskListProps) => 
 
   return (
     <div className="TaskList">
+      <h1>{title}</h1>
       {tasks.map((task) => (
         <div className="TaskItem" key={task._id}>
           <span>{task.title}</span>

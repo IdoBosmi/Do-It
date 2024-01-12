@@ -1,7 +1,5 @@
-export interface TaskModel {
+export interface TaskListModel {
     _id: string,
-    userId: string, //???
-    taskListId: string, 
     title: string,
     createdAt: string,
     updatedAt: string

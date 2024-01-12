@@ -54,7 +54,8 @@ export const getTask: RequestHandler =  async (req, res, next) => {
 
 export const createTask: RequestHandler = async (req, res, next) =>{
     
-    const title =  req.body.title
+    const title =  req.body.title;
+    const taskListId = req.body.taskListId;
     const authenticatedUserId = req.session.userId;
 
     try {
@@ -65,9 +66,12 @@ export const createTask: RequestHandler = async (req, res, next) =>{
             throw createHttpError(400, "Task must have a title");
         }
 
+        //check if taskListId is ok
+
         const newTask = await taskModel.create({
             userId: authenticatedUserId,
-            title: title
+            title: title,
+            taskListId: taskListId
         });
 
         res.status(201).json(newTask);
@@ -83,7 +87,8 @@ export const createTask: RequestHandler = async (req, res, next) =>{
 export const updateTask: RequestHandler = async (req, res, next) =>{
     
     const taskId = req.params.taskId;
-    const title =  req.body.title
+    const title =  req.body.title;
+    const taskListId = req.body.taskListId;
     const authenticatedUserId = req.session.userId;
 
     try {
@@ -109,6 +114,7 @@ export const updateTask: RequestHandler = async (req, res, next) =>{
         }
 
         task.title = title;
+        task.taskListId = taskListId;
 
         const updatedTask = await task.save();
 

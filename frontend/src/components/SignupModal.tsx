@@ -30,7 +30,7 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
         <Modal show onHide={onDismiss} centered className="SignupModal">
             <Modal.Header closeButton>
                 <Modal.Title>
-                    Login
+                    Sign Up
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
