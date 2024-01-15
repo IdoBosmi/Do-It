@@ -18,7 +18,7 @@ const TaskModal = ({currentTask, onDismiss, onCreateSuccessful, onUpdateSuccessf
 
     useEffect(() => {
         if (currentTask) {
-            setTitle(currentTask.title); // Use empty string as a fallback
+            setTitle(currentTask.title); 
         }
     }, [currentTask]);
 
@@ -26,6 +26,8 @@ const TaskModal = ({currentTask, onDismiss, onCreateSuccessful, onUpdateSuccessf
         try {
 
             if (currentTask){
+                console.log(currentTask);
+                task.taskListId=currentTask.taskListId;
                 const updatedTask = await TaskAPI.updateTask(currentTask._id, task);
                 onUpdateSuccessful(updatedTask);
             } else {

@@ -8,7 +8,7 @@ export const getAuthenticatedUser: RequestHandler = async(req, res, next)=>{
 
 
     try {
-                
+
         const user = await UserModel.findById(req.session.userId).select("+email").exec();
 
         res.status(200).json(user);
@@ -87,6 +87,7 @@ export const login: RequestHandler = async (req, res, next) =>{
         }
 
         req.session.userId = user._id;
+        
 
         res.status(201).json(user)
 

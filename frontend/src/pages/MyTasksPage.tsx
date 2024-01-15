@@ -42,8 +42,12 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
                 console.log(error);
             }
         }
-        loadTasks();
-        loadTaskLists();
+        
+        if (loggedInUser){
+            loadTasks();
+            loadTaskLists();
+        }
+
     }, [loggedInUser]);
 
 
@@ -63,6 +67,7 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
     const onUpdateSuccessful = (updatedTask: TaskModel) => {
         setTasks(tasks.map(item => item._id === updatedTask._id ? updatedTask : item));
         setShowTaskModal(false);
+        setTaskToEdit(null);
     }
 
     const onDeleteSuccessful = (deletedTask: TaskModel) => {

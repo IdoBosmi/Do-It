@@ -8,8 +8,11 @@ import createHttpError, {isHttpError} from "http-errors";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import { requireAuth } from "./middleware/auth";
+import cors from 'cors';
+
 
 const app = express();
+
 
 app.use(morgan("dev"));
 
@@ -27,6 +30,13 @@ app.use(session({
     store: MongoStore.create({mongoUrl: process.env.MONGO_CONNECTION_STRING})
 }));
 
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use("/api/taskLists", taskListsRoute)
 app.use("/api/tasks", requireAuth, tasksRoutes);

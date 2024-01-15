@@ -3,7 +3,10 @@ import { TaskModel } from "../models/task";
 import { UserModel } from "../models/user";
 
 async function fetchData(input: RequestInfo, init?: RequestInit) {
-    const response = await fetch(input, init);
+
+    console.log(init);
+
+    const response = await fetch("http://localhost:5000"+input, init);
 
     if (response.ok) {
         return response;
@@ -18,7 +21,7 @@ async function fetchData(input: RequestInfo, init?: RequestInit) {
 
 export async function fetchTaskLists(): Promise<TaskListModel[]> {
 
-    const response = await fetchData("/api/taskLists", { method: "GET" });
+    const response = await fetchData("/api/taskLists", { method: "GET", credentials: 'include' });
     return response.json();
 
 }
@@ -34,6 +37,7 @@ export async function createTaskList(taskList: TaskListInput): Promise<TaskListM
         headers: {
             "Content-Type": "application/json"
         },
+        credentials: 'include',
         body: JSON.stringify(taskList)
     });
 
@@ -43,7 +47,7 @@ export async function createTaskList(taskList: TaskListInput): Promise<TaskListM
 
 
 export async function deleteTaskList(taskListId: string) {
-    await fetchData("/api/taskLists/" + taskListId, { method: "DELETE" });
+    await fetchData("/api/taskLists/" + taskListId, { method: "DELETE",credentials: 'include' });
 }
 
 
@@ -53,6 +57,7 @@ export async function updateTaskList(taskListId: string, taskList: TaskListInput
         headers: {
             "Content-Type": "application/json"
         },
+        credentials: 'include',
         body: JSON.stringify(taskList)
     });
     return response.json();
@@ -63,7 +68,7 @@ export async function updateTaskList(taskListId: string, taskList: TaskListInput
 //Users
 
 export async function getLoggedInUser(): Promise<UserModel> {
-    const response = await fetchData("/api/users", { method: "GET" });
+    const response = await fetchData("/api/users", { method: "GET" , credentials: 'include'});
     return response.json();
 }
 
@@ -81,6 +86,7 @@ export async function signUp(credentials: SignUpCredentials): Promise<UserModel>
         headers: {
             "Content-Type": "application/json"
         },
+        credentials: 'include',
         body: JSON.stringify(credentials)
     })
 
@@ -94,14 +100,17 @@ export interface LoginCredentials {
     password: string
 }
 
-export async function login(credentials: LoginCredentials): Promise<UserModel> {
+export async function login(credentials1: LoginCredentials): Promise<UserModel> {
+
+    console.log("login");
 
     const response = await fetchData("/api/users/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(credentials)
+        credentials: 'include',
+        body: JSON.stringify(credentials1)
     })
 
     return response.json();
@@ -109,7 +118,7 @@ export async function login(credentials: LoginCredentials): Promise<UserModel> {
 
 
 export async function logout() {
-    await fetchData("api/users/logout", { method: "POST" });
+    await fetchData("/api/users/logout", { method: "POST" , credentials: 'include'});
 }
 
 
@@ -119,7 +128,7 @@ export async function logout() {
 
 export async function fetchTasks(): Promise<TaskModel[]> {
 
-    const response = await fetchData("/api/tasks", { method: "GET" });
+    const response = await fetchData("/api/tasks", { method: "GET", credentials: 'include' });
     return response.json();
 
 }
@@ -137,6 +146,7 @@ export async function createTask(task: TaskInput): Promise<TaskModel> {
         headers: {
             "Content-Type": "application/json"
         },
+        credentials: 'include',
         body: JSON.stringify(task)
     });
 
@@ -147,7 +157,7 @@ export async function createTask(task: TaskInput): Promise<TaskModel> {
 
 export async function deleteTask(taskId: string) {
     console.log(taskId)
-    await fetchData("/api/tasks/" + taskId, { method: "DELETE" });
+    await fetchData("/api/tasks/" + taskId, { method: "DELETE", credentials: 'include' });
 }
 
 
@@ -157,6 +167,7 @@ export async function updateTask(taskId: string, task: TaskInput): Promise<TaskM
         headers: {
             "Content-Type": "application/json"
         },
+        credentials: 'include',
         body: JSON.stringify(task)
     });
     return response.json();
