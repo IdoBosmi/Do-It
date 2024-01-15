@@ -18,7 +18,6 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
         with:
           registry: ${{ secrets.AWS_REGISTRY }}
-          region: ${{ secrets.AWS_REGION }}
 
       - name: Build and Push Frontend Image
         run: |
