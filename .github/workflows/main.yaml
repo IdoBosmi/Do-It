@@ -1,0 +1,33 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-push-images:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry: ${{ secrets.AWS_REGISTRY }}
+          region: ${{ secrets.AWS_REGION }}
+
+      - name: Build and Push Frontend Image
+        run: |
+          docker build -t ${{ secrets.FRONTEND_ECR_REPO }} -f frontend/Dockerfile .
+          docker tag ${{ secrets.FRONTEND_ECR_REPO }}:latest ${{ secrets.AWS_REGISTRY }}/${{ secrets.FRONTEND_ECR_REPO }}:latest
+          docker push ${{ secrets.AWS_REGISTRY }}/${{ secrets.FRONTEND_ECR_REPO }}:latest
+
+      - name: Build and Push Backend Image
+        run: |
+          docker build -t ${{ secrets.BACKEND_ECR_REPO }} -f backend/Dockerfile .
+          docker tag ${{ secrets.BACKEND_ECR_REPO }}:latest ${{ secrets.AWS_REGISTRY }}/${{ secrets.BACKEND_ECR_REPO }}:latest
+          docker push ${{ secrets.AWS_REGISTRY }}/${{ secrets.BACKEND_ECR_REPO }}:latest
