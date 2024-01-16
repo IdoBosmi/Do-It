@@ -1,7 +1,11 @@
 import "dotenv/config";
-import mongoose from "mongoose";
+//import mongoose from "mongoose";
 import app from "./app";
 
+
+app.listen(5000, ()=>{
+    console.log("Server running on port: " + 5000);
+})
 
 //const port = process.env.PORT;
 

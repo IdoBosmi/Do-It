@@ -1,14 +1,14 @@
-import "dotenv/config";
+//import "dotenv/config";
 import express, {NextFunction, Request, Response, request} from "express";
-import tasksRoutes from "./routes/tasks";
-import userRoutes from "./routes/users";
-import taskListsRoute from "./routes/taskLists";
-import morgan from "morgan";
-import createHttpError, {isHttpError} from "http-errors";
-import session from "express-session";
-import MongoStore from "connect-mongo";
-import { requireAuth } from "./middleware/auth";
-import cors from 'cors';
+// import tasksRoutes from "./routes/tasks";
+// import userRoutes from "./routes/users";
+// import taskListsRoute from "./routes/taskLists";
+// import morgan from "morgan";
+// import createHttpError, {isHttpError} from "http-errors";
+// import session from "express-session";
+// import MongoStore from "connect-mongo";
+// import { requireAuth } from "./middleware/auth";
+// import cors from 'cors';
 
 
 const app = express();
@@ -17,9 +17,7 @@ app.get('/', function (req, res){
     res.send("hello world ido!");
 });
 
-app.listen(5000, ()=>{
-    console.log("Server running on port: " + 5000);
-})
+
 
 // app.use(morgan("dev"));
 
