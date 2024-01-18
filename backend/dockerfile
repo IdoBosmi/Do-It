@@ -10,7 +10,7 @@ COPY . .
 
 EXPOSE 5000
 
-RUN tcs && node dist/server.js
+CMD ["tsc", "&&", "node", "dist/server.js"]
 
 
 
