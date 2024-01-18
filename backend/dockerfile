@@ -10,7 +10,7 @@ COPY . .
 
 EXPOSE 5000
 
-CMD ["tsc", "&&", "node", "dist/server.js"]
+CMD ["sh", "-c", "npx tsc && node dist/server.js"]
 
 
 
