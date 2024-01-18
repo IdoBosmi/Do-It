@@ -10,7 +10,7 @@ COPY . .
 
 EXPOSE 5000
 
-CMD ["npm", "start"]
+RUN tcs && node dist/server.js
 
 
 
