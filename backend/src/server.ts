@@ -1,15 +1,12 @@
 import "dotenv/config";
-//import mongoose from "mongoose";
+import mongoose from "mongoose";
 import app from "./app";
 
 
-app.listen(5000, ()=>{
-    console.log("Server running on port: " + 5000);
-})
 
-//const port = process.env.PORT;
+const port = 5000; //process.env.PORT;
 
-/*
+
 mongoose.connect(process.env.MONGO_CONNECTION_STRING!)
 .then(()=>{
     console.log("Mongoose connected...");
@@ -18,6 +15,6 @@ mongoose.connect(process.env.MONGO_CONNECTION_STRING!)
     })
 })
 .catch(console.error)
-*/
+
 
 

@@ -59,6 +59,9 @@ app.use((0, cors_1.default)(corsOptions));
 app.use("/api/taskLists", taskLists_1.default);
 app.use("/api/tasks", auth_1.requireAuth, tasks_1.default);
 app.use("/api/users", users_1.default);
+app.use("/", (req, res) => {
+    res.send("hello!!!");
+});
 app.use((req, res, next) => {
     next((0, http_errors_1.default)(404, "Endpoint not found"));
 });
