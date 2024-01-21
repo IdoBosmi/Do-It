@@ -11,6 +11,8 @@ import SignUpModal from './components/SignupModal';
 function App() {
 
 
+  console.log("App!");
+
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState<UserModel | null>(null);
