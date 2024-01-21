@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package*.json .
 
-RUN npm install --only=production && npm cache clean --force && npm install -g typescript
+RUN npm ci
 
 COPY . .
 
