@@ -3,15 +3,7 @@ import mongoose from "mongoose";
 import app from "./app";
 
 
-console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
-const port = 5000; //process.env.PORT;
-
-// app.listen(port, ()=>{
-//     console.log("Server running on port: " + port);
-// })
-
-
+const port = process.env.PORT;
 
 mongoose.connect(process.env.MONGO_CONNECTION_STRING!)
 .then(()=>{
