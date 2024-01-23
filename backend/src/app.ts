@@ -29,20 +29,20 @@ app.use(session({
     store: MongoStore.create({mongoUrl: process.env.MONGO_CONNECTION_STRING})
 }));
 
+
+const FRONTEND_IP = process.env.FRONTEND_IP || "http://localhost:3000"
+
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: FRONTEND_IP,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 };
 
 app.use(cors(corsOptions));
 
-app.use("/api/taskLists", taskListsRoute)
+app.use("/api/taskLists", taskListsRoute);
 app.use("/api/tasks", requireAuth, tasksRoutes);
-app.use("/api/users", userRoutes)
-app.use("/", (req, res)=>{
-    res.send("hello!!!")
-})
+app.use("/api/users", userRoutes);
 
 app.use((req: Request, res: Response, next:NextFunction )=>{
     next(createHttpError(404,"Endpoint not found"));
