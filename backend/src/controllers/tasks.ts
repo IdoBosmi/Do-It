@@ -56,10 +56,10 @@ export const createTask: RequestHandler = async (req, res, next) =>{
     
     const title =  req.body.title;
     const taskListId = req.body.taskListId;
+    const dueDate = req.body.dueDate;
     const authenticatedUserId = req.session.userId;
 
     try {
-
         assertIsDefined(authenticatedUserId);
 
         if (!title){
@@ -71,7 +71,9 @@ export const createTask: RequestHandler = async (req, res, next) =>{
         const newTask = await taskModel.create({
             userId: authenticatedUserId,
             title: title,
-            taskListId: taskListId
+            taskListId: taskListId,
+            dueDate: dueDate,
+            isCompleted: false
         });
 
         res.status(201).json(newTask);
@@ -89,6 +91,8 @@ export const updateTask: RequestHandler = async (req, res, next) =>{
     const taskId = req.params.taskId;
     const title =  req.body.title;
     const taskListId = req.body.taskListId;
+    const dueDate = req.body.dueDate;
+    const isCompleted = req.body.isCompleted;
     const authenticatedUserId = req.session.userId;
 
     try {
@@ -115,6 +119,8 @@ export const updateTask: RequestHandler = async (req, res, next) =>{
 
         task.title = title;
         task.taskListId = taskListId;
+        task.dueDate = dueDate;
+        task.isCompleted = isCompleted;
 
         const updatedTask = await task.save();
 
@@ -123,7 +129,6 @@ export const updateTask: RequestHandler = async (req, res, next) =>{
     } catch (error) {
         next(error);
     }
-
 
 }
 

@@ -4,5 +4,7 @@ export interface TaskModel {
     taskListId: string, 
     title: string,
     createdAt: string,
-    updatedAt: string
+    updatedAt: string,
+    dueDate: Date,
+    isCompleted: boolean
 }

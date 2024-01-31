@@ -4,7 +4,7 @@ import { UserModel } from "../models/user";
 
 async function fetchData(input: RequestInfo, init?: RequestInit) {
 
-    const API_IP = process.env.REACT_APP_API_IP || "http://13.41.226.216:5000"
+    const API_IP = process.env.REACT_APP_API_IP || "http://localhost:5000"
 
     const response = await fetch(API_IP+input, init);
 
@@ -135,7 +135,8 @@ export async function fetchTasks(): Promise<TaskModel[]> {
 
 export interface TaskInput {
     title: string,
-    taskListId?: string
+    taskListId?: string,
+    dueDate?: Date
 }
 
 

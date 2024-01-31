@@ -79,6 +79,7 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
         setShowTaskModal(true);
     }
 
+
     return (
         <div className="taskPageDiv">
             {loggedInUser
@@ -89,6 +90,7 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
                         tasks={currentTaskList ? tasks.filter(item=> item.taskListId === currentTaskList._id) : tasks}
                         onDeleteSuccessful={onDeleteSuccessful}
                         onEditClick={onEditClick}
+                        onCompletedSuccessful = {onUpdateSuccessful}
                         onAddTaskClick = {() => setShowTaskModal(true)}
                     />
                     

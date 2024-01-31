@@ -54,6 +54,7 @@ exports.getTask = getTask;
 const createTask = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const title = req.body.title;
     const taskListId = req.body.taskListId;
+    const dueDate = req.body.dueDate;
     const authenticatedUserId = req.session.userId;
     try {
         (0, assertIsDefined_1.assertIsDefined)(authenticatedUserId);
@@ -64,7 +65,9 @@ const createTask = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         const newTask = yield task_1.default.create({
             userId: authenticatedUserId,
             title: title,
-            taskListId: taskListId
+            taskListId: taskListId,
+            dueDate: dueDate,
+            isCompleted: false
         });
         res.status(201).json(newTask);
     }
@@ -77,6 +80,8 @@ const updateTask = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     const taskId = req.params.taskId;
     const title = req.body.title;
     const taskListId = req.body.taskListId;
+    const dueDate = req.body.dueDate;
+    const isCompleted = req.body.isCompleted;
     const authenticatedUserId = req.session.userId;
     try {
         (0, assertIsDefined_1.assertIsDefined)(authenticatedUserId);
@@ -95,6 +100,8 @@ const updateTask = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         }
         task.title = title;
         task.taskListId = taskListId;
+        task.dueDate = dueDate;
+        task.isCompleted = isCompleted;
         const updatedTask = yield task.save();
         res.status(200).json(updatedTask);
     }

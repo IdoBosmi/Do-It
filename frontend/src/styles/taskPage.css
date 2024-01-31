@@ -119,8 +119,13 @@
   .TaskItem .delete {
     background-color:#E23E57;
   }
-  
-  /* Add more specific styles as needed */
-  
+    
 
-  
+.task-icons {
+  font-size: 24px; 
+  cursor: pointer;
+}
+
+.TaskList .TaskItem.completed {
+  opacity: 0.5; 
+}

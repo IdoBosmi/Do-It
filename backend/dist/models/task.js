@@ -12,6 +12,12 @@ const taskSchema = new mongoose_1.Schema({
     },
     taskListId: {
         type: String
+    },
+    dueDate: {
+        type: Date
+    },
+    isCompleted: {
+        type: Boolean
     }
 }, { timestamps: true });
 exports.default = (0, mongoose_1.model)("Task", taskSchema);

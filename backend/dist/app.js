@@ -45,13 +45,16 @@ app.use((0, express_session_1.default)({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge: 60 * 60 * 1000
+        maxAge: 60 * 60 * 1000,
+        // sameSite: 'none',
+        // secure: true
     },
     rolling: true,
     store: connect_mongo_1.default.create({ mongoUrl: process.env.MONGO_CONNECTION_STRING })
 }));
+const FRONTEND_IP = process.env.FRONTEND_IP || "http://localhost:3000";
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: FRONTEND_IP,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 };
@@ -59,9 +62,6 @@ app.use((0, cors_1.default)(corsOptions));
 app.use("/api/taskLists", taskLists_1.default);
 app.use("/api/tasks", auth_1.requireAuth, tasks_1.default);
 app.use("/api/users", users_1.default);
-app.use("/", (req, res) => {
-    res.send("hello!!!");
-});
 app.use((req, res, next) => {
     next((0, http_errors_1.default)(404, "Endpoint not found"));
 });

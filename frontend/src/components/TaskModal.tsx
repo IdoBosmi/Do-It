@@ -15,10 +15,12 @@ interface LoginModalProps {
 const TaskModal = ({currentTask, onDismiss, onCreateSuccessful, onUpdateSuccessful, currentTaskList} : LoginModalProps) =>{
 
     const [title, setTitle] = useState<string>("");
+    const [dueDate, setDueDate] = useState<Date>(new Date());
 
     useEffect(() => {
         if (currentTask) {
-            setTitle(currentTask.title); 
+            setTitle(currentTask.title);
+            setDueDate(new Date(currentTask.dueDate)) 
         }
     }, [currentTask]);
 
@@ -26,7 +28,6 @@ const TaskModal = ({currentTask, onDismiss, onCreateSuccessful, onUpdateSuccessf
         try {
 
             if (currentTask){
-                console.log(currentTask);
                 task.taskListId=currentTask.taskListId;
                 const updatedTask = await TaskAPI.updateTask(currentTask._id, task);
                 onUpdateSuccessful(updatedTask);
@@ -52,7 +53,8 @@ const TaskModal = ({currentTask, onDismiss, onCreateSuccessful, onUpdateSuccessf
             </Modal.Header>
             <Modal.Body className="modal-body">
                 <input placeholder="Enter Title" value={title} onChange={(e) => setTitle(e.target.value)} />
-                <Button className= "submit-button" onClick={() => onSubmit({title: title})}>
+                <input type="date" placeholder="Enter Due Date" value={dueDate.toISOString().split('T')[0]} onChange={(e) => setDueDate(new Date(e.target.value))} />
+                <Button className= "submit-button" onClick={() => onSubmit({title: title, dueDate:dueDate})}>
                 Submit
                 </Button>
             </Modal.Body>

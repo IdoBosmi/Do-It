@@ -11,6 +11,12 @@ const taskSchema = new Schema({
     },
     taskListId: {
         type: String
+    },
+    dueDate: {
+        type: Date
+    },
+    isCompleted: {
+        type: Boolean
     }
 }, { timestamps: true });
 
