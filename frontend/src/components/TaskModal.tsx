@@ -4,7 +4,7 @@ import {Button, Modal} from 'react-bootstrap'
 import { TaskModel } from '../models/task';
 import { TaskListModel } from '../models/TaskList';
 
-interface LoginModalProps {
+interface TaskModalProps {
     currentTaskList: TaskListModel | null,
     currentTask: TaskModel | null
     onDismiss: () => void,
@@ -12,7 +12,7 @@ interface LoginModalProps {
     onUpdateSuccessful: (task: TaskModel) => void
 }
 
-const TaskModal = ({currentTask, onDismiss, onCreateSuccessful, onUpdateSuccessful, currentTaskList} : LoginModalProps) =>{
+const TaskModal = ({currentTask, onDismiss, onCreateSuccessful, onUpdateSuccessful, currentTaskList} : TaskModalProps) =>{
 
     const [title, setTitle] = useState<string>("");
     const [dueDate, setDueDate] = useState<Date>(new Date());

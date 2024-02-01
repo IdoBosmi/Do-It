@@ -7,6 +7,7 @@ import TaskModal from "../components/TaskModal";
 import Sidebar from "../components/Sidebar";
 import { TaskListModel } from "../models/TaskList";
 import "../styles/taskPage.css"
+import NewTaskListModal from "../components/NewTaskListModal";
 
 interface MyTasksPageProps {
     loggedInUser: UserModel | null,
@@ -19,7 +20,9 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
     const [currentTaskList, setCurrentTaskList] = useState<TaskListModel | null>(null);
     const [tasks, setTasks] = useState<TaskModel[]>([]);
     const [showTaskModal, setShowTaskModal] = useState(false);
+    const [showTaskListModal, setShowTaskListModal] = useState(false);
     const [taskToEdit, setTaskToEdit] = useState<TaskModel | null>(null);
+    const [taskListToEdit, setTaskListToEdit] = useState<TaskListModel | null>(null);
 
 
 
@@ -80,11 +83,39 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
     }
 
 
+    const onCreateSuccessfulTaskList = (createdTaskList: TaskListModel) => {
+        setTaskLists([...taskLists, createdTaskList]);
+        setShowTaskListModal(false);
+    }
+
+    const onUpdateSuccessfulTaskList = (updatedTaskList: TaskListModel) => {
+        setTaskLists(taskLists.map(item => item._id === updatedTaskList._id ? updatedTaskList : item));
+        setShowTaskListModal(false);
+        setTaskListToEdit(null);
+    }
+
+    const onDeleteSuccessfulTaskList = (deletedTaskList: TaskListModel) => {
+        setTaskLists(taskLists.filter(item => item._id !== deletedTaskList._id))
+    }
+
+    const onEditClickTaskList = (taskList: TaskListModel) => {
+        setTaskListToEdit(taskList);
+        setShowTaskListModal(true);
+    }
+
+
     return (
         <div className="taskPageDiv">
             {loggedInUser
                 ? <>
-                    <Sidebar taskLists={taskLists} onTaskListClick={onTaskListClick}/>
+                    <Sidebar
+                        taskLists={taskLists}
+                        onTaskListClick={onTaskListClick}
+                        onAddTaskListClick={()=>setShowTaskListModal(true)}
+                        onDeleteSuccessful={onDeleteSuccessfulTaskList}
+                        onEditClick={onEditClickTaskList}
+                        onCompletedSuccessful = {onUpdateSuccessfulTaskList}
+                    />
                     <TaskList
                         title= {currentTaskList ? currentTaskList.title : "All"}
                         tasks={currentTaskList ? tasks.filter(item=> item.taskListId === currentTaskList._id) : tasks}
@@ -105,6 +136,18 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
                             }}
                             onUpdateSuccessful={onUpdateSuccessful}
                             onCreateSuccessful={onCreateSuccessful}
+                        />
+                    }
+
+                    {showTaskListModal &&
+                        <NewTaskListModal
+                            currentTaskList={taskListToEdit}
+                            onDismiss={() => {
+                                setShowTaskListModal(false);
+                                setTaskListToEdit(null);
+                            }}
+                            onUpdateSuccessful={onUpdateSuccessfulTaskList}
+                            onCreateSuccessful={onCreateSuccessfulTaskList}
                         />
                     }
                 </>

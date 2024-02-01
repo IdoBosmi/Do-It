@@ -36,6 +36,17 @@
     height: 85vh;
 }
 
+
+.SideBar-Header button {
+  margin-left: 10px; /* Adjust as needed */
+  padding: 5px 10px;
+  cursor: pointer;
+  border: 0px;
+  border-radius: 10px;
+  background-color: #0093b8;
+}
+
+
 /* Styling for each task item in the sidebar */
 .Sidebar .ListItem {
     padding: 10px;
@@ -45,6 +56,13 @@
     border-radius: 10px;
 }
 
+.Sidebar .ListItem button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border: 0px;
+  border-radius: 10px;
+}
 
 /* taskList.css */
 
