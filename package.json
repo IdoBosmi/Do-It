@@ -9,6 +9,10 @@
         "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
     },
     "scripts": {
-        "start:docker": "sh ./build_and_run.sh"
+        "start:docker": "sh ./build_and_run.sh",
+        "start": "concurrently \"npm start --prefix ./backend\" \"npm start --prefix ./frontend\""
+    },
+    "dependencies": {
+        "concurrently": "^8.2.2"
     }
 }
