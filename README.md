@@ -16,7 +16,6 @@ The Do It Tasks Manager is a TypeScript Node.js application with a React fronten
    - [Run Locally with Docker](#run-locally-with-docker)
    - [Access Online (my-mesimot.online)](#access-online-mymesimotonline)
 3. [Technologies Used](#technologies-used)
-4. [License](#license)
 
 ## Project Architecture
 ![Do-it-Architecture](https://github.com/IdoBosmi/Do-It/assets/80417979/1fffc485-1510-4831-914e-961752d7862d)
@@ -61,5 +60,3 @@ The Do It Tasks Manager is a TypeScript Node.js application with a React fronten
 - AWS ELB
 - Route 53 Hosted Zone
 
-## License
-This project is licensed under the [MIT License](LICENSE).
