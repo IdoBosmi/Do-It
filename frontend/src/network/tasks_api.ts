@@ -4,7 +4,7 @@ import { UserModel } from "../models/user";
 
 async function fetchData(input: RequestInfo, init?: RequestInit) {
 
-    const API_IP = process.env.REACT_APP_API_IP || "https://my-mesimot.online:5000"
+    const API_IP = process.env.REACT_APP_API_IP || "http://localhost:5000"
 
     const response = await fetch(API_IP+input, init);
 
