@@ -16,7 +16,7 @@ interface TaskListProps {
 
 const TaskList = ({ tasks, onDeleteSuccessful, onEditClick, title, onAddTaskClick, onCompletedSuccessful}: TaskListProps) => {
 
-
+  console.log(tasks)
   const onDeleteClick = async (taskToDelete: TaskModel) => {
     await TaskAPI.deleteTask(taskToDelete._id);
     onDeleteSuccessful(taskToDelete)
@@ -28,29 +28,51 @@ const TaskList = ({ tasks, onDeleteSuccessful, onEditClick, title, onAddTaskClic
     onCompletedSuccessful(completedTask);
   }
 
+  
+  const getDueDateText = (dueDate: Date): string => {
+      const currentDate = new Date();
+      const taskDate = new Date(dueDate);
+
+      if (taskDate.toDateString() === currentDate.toDateString()) {
+          return 'Today';
+      } else {
+          const tomorrow = new Date();
+          tomorrow.setDate(currentDate.getDate() + 1);
+          if (taskDate.toDateString() === tomorrow.toDateString()) {
+              return 'Tomorrow';
+          }
+      }
+
+      return taskDate.toLocaleDateString(); // Use default due date format if not today or tomorrow
+
+  }
+
   return (
-    <div className="TaskList">
-      <div className='TaskList-Header'>
-        <h1>{title}</h1>
-        <button onClick={onAddTaskClick}>Add Task</button>
-      </div>
-      {tasks.map((task) => (
-        <div className={`TaskItem ${task.isCompleted ? 'completed' : ''}`} key={task._id}>
+      <>
+      {tasks.map((task) => {
+
+        let isPastDue = new Date(task.dueDate).getDate() < new Date().getDate();
+
+        return(
+        <div className={`TaskItem ${task.isCompleted ? 'completed' : ''} ${isPastDue ? 'past-due' : ''}`} key={task._id}>
           {task.isCompleted ?(
             <MdCheckBox className='task-icons' onClick={() => onCompleteClick(task)} />
           ) : (
             <MdCheckBoxOutlineBlank className='task-icons' onClick={() => onCompleteClick(task)} />
           )
           }
-
+          
           <span>{task.title}</span>
-          <span>{new Date(task.dueDate).toLocaleDateString()}</span>
+          {!task.isCompleted && <h6 className='due-date'>{getDueDateText(task.dueDate)}</h6>}
+          
           
           <FiEdit className='task-icons' onClick={() => onEditClick(task)}/>
           <FaTrashCan className='task-icons' onClick={() => onDeleteClick(task)}/>
         </div>
-      ))}
-    </div>
+        )
+      
+        })}
+        </>
   );
 };
 

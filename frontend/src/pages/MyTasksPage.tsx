@@ -18,11 +18,14 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
 
     const [taskLists, setTaskLists] = useState<TaskListModel[]>([]);
     const [currentTaskList, setCurrentTaskList] = useState<TaskListModel | null>(null);
+    const [isTodayFilterOn, setIsTodayFilterOn] = useState<boolean>(false);
     const [tasks, setTasks] = useState<TaskModel[]>([]);
     const [showTaskModal, setShowTaskModal] = useState(false);
     const [showTaskListModal, setShowTaskListModal] = useState(false);
     const [taskToEdit, setTaskToEdit] = useState<TaskModel | null>(null);
     const [taskListToEdit, setTaskListToEdit] = useState<TaskListModel | null>(null);
+    const [completedTasks, setCompletedTasks] = useState<TaskModel[]>([]);
+    const [isCompletedMode, setIsCompletedMode] = useState<boolean>(false);
 
 
 
@@ -39,7 +42,9 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
         async function loadTasks() {
             try {
                 const tasks = await TaskAPI.fetchTasks();
-                setTasks(tasks);
+                const sortedTasks = tasks.sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+                setTasks(sortedTasks.filter(item=> !item.isCompleted));
+                setCompletedTasks(sortedTasks.filter(item=> item.isCompleted))
             }
             catch (error) {
                 console.log(error);
@@ -59,22 +64,42 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
         setCurrentTaskList(taskList);
     }
 
-
     //Tasks
 
     const onCreateSuccessful = (createdTask: TaskModel) => {
-        setTasks([...tasks, createdTask]);
+        setTasks([...tasks, createdTask].sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()));
         setShowTaskModal(false);
     }
 
     const onUpdateSuccessful = (updatedTask: TaskModel) => {
-        setTasks(tasks.map(item => item._id === updatedTask._id ? updatedTask : item));
+        if(updatedTask.isCompleted){
+            setCompletedTasks(completedTasks.map(item => item._id === updatedTask._id ? updatedTask : item).sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()));
+        }
+        else {
+            setTasks(tasks.map(item => item._id === updatedTask._id ? updatedTask : item).sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()));
+        }
+        
         setShowTaskModal(false);
         setTaskToEdit(null);
     }
 
+    const onCompleteSuccessful = (updatedTask: TaskModel) => {
+        if(updatedTask.isCompleted){
+            setCompletedTasks([...completedTasks, updatedTask].sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()));
+            setTasks(tasks.filter(item => item._id !== updatedTask._id))
+        } else {
+            setTasks([...tasks, updatedTask].sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()));
+            setCompletedTasks(completedTasks.filter(item => item._id !== updatedTask._id))
+        }
+    }
+
     const onDeleteSuccessful = (deletedTask: TaskModel) => {
-        setTasks(tasks.filter(item => item._id !== deletedTask._id))
+        if(deletedTask.isCompleted){
+            setCompletedTasks(completedTasks.filter(item => item._id !== deletedTask._id))
+        } else {
+            setTasks(tasks.filter(item => item._id !== deletedTask._id))
+        }
+        
     }
 
     const onEditClick = (task: TaskModel) => {
@@ -96,11 +121,34 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
 
     const onDeleteSuccessfulTaskList = (deletedTaskList: TaskListModel) => {
         setTaskLists(taskLists.filter(item => item._id !== deletedTaskList._id))
+        setCurrentTaskList(null);
     }
 
     const onEditClickTaskList = (taskList: TaskListModel) => {
         setTaskListToEdit(taskList);
         setShowTaskListModal(true);
+    }
+
+    const onTodayClick = () => {
+        setIsTodayFilterOn(!isTodayFilterOn);
+    }
+
+
+    const filterTasks = (tasksToFilter:TaskModel[]): TaskModel[] =>{
+
+        if(isTodayFilterOn) {
+            if(currentTaskList){
+                return tasksToFilter.filter(item=> item.taskListId === currentTaskList._id && new Date(item.dueDate).toDateString() === new Date().toDateString());
+            } else {
+                return tasksToFilter.filter(item=> new Date(item.dueDate).toDateString() === new Date().toDateString());
+            }
+        } else{
+            if(currentTaskList){   
+                return tasksToFilter.filter(item=> item.taskListId === currentTaskList._id);
+            } else {
+                return tasksToFilter;
+            }
+        }
     }
 
 
@@ -114,18 +162,38 @@ const MyTasksPage = ({ loggedInUser }: MyTasksPageProps) => {
                         onAddTaskListClick={()=>setShowTaskListModal(true)}
                         onDeleteSuccessful={onDeleteSuccessfulTaskList}
                         onEditClick={onEditClickTaskList}
-                        onCompletedSuccessful = {onUpdateSuccessfulTaskList}
+                        onTodayClick = {onTodayClick}
+                        isTodayFilterOn = {isTodayFilterOn}
                     />
-                    <TaskList
-                        title= {currentTaskList ? currentTaskList.title : "All"}
-                        tasks={currentTaskList ? tasks.filter(item=> item.taskListId === currentTaskList._id) : tasks}
-                        onDeleteSuccessful={onDeleteSuccessful}
-                        onEditClick={onEditClick}
-                        onCompletedSuccessful = {onUpdateSuccessful}
-                        onAddTaskClick = {() => setShowTaskModal(true)}
-                    />
+                    <div className="TaskList">
+                        <div className='TaskList-Header'>
+                            <h1>{currentTaskList ? currentTaskList.title : "All"}</h1>
+                        <button onClick={() => setShowTaskModal(true)}>Add Task</button>
+                        </div>
+                        {!isCompletedMode &&
+                        <TaskList
+                            title= {currentTaskList ? currentTaskList.title : "All"}
+                            tasks={filterTasks(tasks)}
+                            onDeleteSuccessful={onDeleteSuccessful}
+                            onEditClick={onEditClick}
+                            onCompletedSuccessful = {onCompleteSuccessful}
+                            onAddTaskClick = {() => setShowTaskModal(true)}
+                        />
+                        }
+                        <div className={isCompletedMode ? "" : "completed-tasks"}>
+                            <h4 className="CompletedTaskTitle" onClick={()=>setIsCompletedMode(!isCompletedMode)}>{isCompletedMode ? "Back to tasks" : "See all completed tasks"}</h4>
+                            
+                            <TaskList
+                                title= {currentTaskList ? currentTaskList.title : "All"}
+                                tasks={filterTasks(completedTasks)}
+                                onDeleteSuccessful={onDeleteSuccessful}
+                                onEditClick={onEditClick}
+                                onCompletedSuccessful = {onCompleteSuccessful}
+                                onAddTaskClick = {() => setShowTaskModal(true)}
+                            />
+                        </div>
+                    </div>
                     
-
                     {showTaskModal &&
                         <TaskModal
                             currentTaskList={currentTaskList}
