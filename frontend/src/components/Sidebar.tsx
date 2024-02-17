@@ -30,6 +30,7 @@ const Sidebar = ({ taskLists, onTaskListClick, onAddTaskListClick, onDeleteSucce
         <h1>My Task Lists</h1>
         <button onClick={onAddTaskListClick}>Add List</button>
         <button onClick={()=>setEditMode(!editMode)}>{editMode ? "Done" : "Edit lists"}</button>
+        <button onClick={TaskAPI.getAuth}>Google</button>
       </div>
       
       <div className={`ListItem${isTodayFilterOn ? ' today-active' : ''}`} key={"Today"} onClick={onTodayClick}>
