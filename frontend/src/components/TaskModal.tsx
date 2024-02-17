@@ -1,8 +1,10 @@
 import {useState, useEffect} from 'react';
 import * as TaskAPI from '../network/tasks_api'
-import {Button, Modal} from 'react-bootstrap'
+import {Modal} from 'react-bootstrap'
 import { TaskModel } from '../models/task';
 import { TaskListModel } from '../models/TaskList';
+import '../styles/taskModal.css';
+
 
 interface TaskModalProps {
     currentTaskList: TaskListModel | null,
@@ -54,9 +56,9 @@ const TaskModal = ({currentTask, onDismiss, onCreateSuccessful, onUpdateSuccessf
             <Modal.Body className="modal-body">
                 <input placeholder="Enter Title" value={title} onChange={(e) => setTitle(e.target.value)} />
                 <input type="date" placeholder="Enter Due Date" value={dueDate.toISOString().split('T')[0]} onChange={(e) => setDueDate(new Date(e.target.value))} />
-                <Button className= "submit-button" onClick={() => onSubmit({title: title, dueDate:dueDate})}>
+                <button className= "submit-button" onClick={() => onSubmit({title: title, dueDate:dueDate})}>
                 Submit
-                </Button>
+                </button>
             </Modal.Body>
         </Modal>
     )

@@ -36,7 +36,7 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
       <Modal.Body className="modal-body">
         <input placeholder="Enter Username" onChange={(e) => setUsername(e.target.value)} />
         <input placeholder="Enter Password" type="password" onChange={(e) => setPassword(e.target.value)} />
-        <Button className="submit-button" onClick={() => onSubmit({ username: username, password: password })}>
+        <Button className="submit" onClick={() => onSubmit({ username: username, password: password })}>
           Submit
         </Button>
       </Modal.Body>

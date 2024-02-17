@@ -6,7 +6,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: #140b47; /* Use your desired color */
+    background-color: #0093b8; /* Use your desired color */
     color: #ffffff; /* Text color */
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   }
@@ -32,21 +32,36 @@
   
   /* Styling for the logout button */
   .logout-button {
-    background-color: #e74c3c; /* Use your desired color */
-    color: #ffffff; /* Text color */
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer;
+    background-color: #c42d2d; /* White background color */
+    color: #e6f0ef; /* Button text color */
+    padding: 10px 20px; /* Padding for the button */
+    margin-right: 10px; /* Margin between buttons */
+    border: none; /* Remove button border */
+    border-radius: 4px; /* Button border radius */
+    cursor: pointer; /* Cursor on hover */
+    font-weight: bold; /* Make text bold */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+  }
+
+  .login-button:hover{
+    background-color: #f0f0f0; /* Lighter background color on hover */
   }
   
-  /* Styling for the login and signup buttons */
-  .login-button,
-  .signup-button {
-    background-color: #2ecc71; /* Use your desired color */
-    color: #ffffff; /* Text color */
-    padding: 5px 10px;
-    margin-right: 10px;
-    border: none;
-    cursor: pointer;
-  }
-  
+  /* Global button styling */
+.login-button,
+.signup-button {
+    background-color: #ffffff; /* White background color */
+    color: #007F75; /* Button text color */
+    padding: 10px 20px; /* Padding for the button */
+    margin-right: 10px; /* Margin between buttons */
+    border: none; /* Remove button border */
+    border-radius: 4px; /* Button border radius */
+    cursor: pointer; /* Cursor on hover */
+    font-weight: bold; /* Make text bold */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+.login-button:hover,
+.signup-button:hover {
+    background-color: #f0f0f0; /* Lighter background color on hover */
+}

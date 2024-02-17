@@ -37,7 +37,7 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
                 <input placeholder="Enter Username" onChange={(e) => setUsername(e.target.value)} />
                 <input placeholder="Enter Email" onChange={(e) => setEmail(e.target.value)} />
                 <input placeholder="Enter Password" type="password" onChange={(e) => setPassword(e.target.value)} />
-                <button onClick={() => onSubmit({ username: username, password: password, email: email })}>Submit</button>
+                <button className='submit' onClick={() => onSubmit({ username: username, password: password, email: email })}>Submit</button>
 
             </Modal.Body>
         </Modal>

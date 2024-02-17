@@ -1,0 +1,41 @@
+/* modal.css */
+
+/* Styling for modal header */
+.modal-header {
+    background-color: #0093b8; /* Header background color */
+    color: white; /* Header text color */
+    border-bottom: 0; /* Remove default border */
+}
+
+/* Styling for modal title */
+.modal-title {
+    margin: 0; /* Remove default margin */
+}
+
+/* Styling for modal body */
+.modal-body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Styling for input fields */
+.modal-body input {
+    margin-bottom: 10px; /* Add spacing between input fields */
+    padding: 8px; /* Add padding to input fields */
+    border: 1px solid #ccc; /* Add border to input fields */
+    border-radius: 4px; /* Add border radius to input fields */
+}
+
+/* Styling for submit button */
+.submit-button {
+    background-color: #0093b8; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* Remove default button border */
+    border-radius: 4px; /* Add border radius to button */
+    padding: 10px 20px; /* Add padding to button */
+    cursor: pointer; /* Add cursor pointer on hover */
+}
+
+.submit-button:hover {
+    background-color: #036d88; /* Darker background color on hover */
+}

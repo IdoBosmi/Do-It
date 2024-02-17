@@ -2,78 +2,100 @@
 
 /* Overall styling for the task page container */
 .taskPageDiv {
-    display: flex;
+  display: flex;
 }
 
 /* Additional styling for the content */
 .taskPageDiv > * {
-    margin: 20px;
+  margin: 20px;
 }
 
 /* Styling for the "Add Task" button */
 .taskPageDiv button {
-    padding: 10px;
-    cursor: pointer;
-}
-
-
-.not-logged-in-page {
-  background-color: #748DA6;
-  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  background-color: #0093b8; /* Matches Sidebar button color */
   color: white;
-  padding: 20px;
-  text-align: center;
+  border: none;
+  border-radius: 8px;
 }
 
+/* Styling for the not-logged-in-page section */
+.not-logged-in-page {
+  text-align: center; /* Center-align text */
+  margin: 10% auto; /* Center vertically on the screen */
+  max-width: 600px; /* Limit width for better readability */
+}
+
+/* Styling for the h1 within not-logged-in-page */
+.not-logged-in-page h1 {
+  color: #007F75; /* Text color */
+  font-size: 36px; /* Font size */
+  font-weight: bold; /* Font weight */
+  margin-bottom: 20px; /* Margin bottom */
+}
+
+/* Styling for the h2 within not-logged-in-page */
+.not-logged-in-page h2 {
+  color: #748DA6; /* Text color */
+  font-size: 24px; /* Font size */
+  margin-bottom: 40px; /* Margin bottom */
+}
 
 /* Styling for the sidebar container */
 .Sidebar {
-    width: 25%; /* Adjust as needed */
-    padding: 20px;
-    box-sizing: border-box;
-    background-color: #F2D1D1;
-    border-radius: 10px;
-    height: 85vh;
+  width: 25%; /* Adjust as needed */
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #ffffff; /* White background */
+  border-radius: 10px;
+  height: 85vh;
 }
-
 
 .SideBar-Header button {
   margin-left: 10px; /* Adjust as needed */
-  padding: 5px 10px;
+  padding: 8px 16px;
   cursor: pointer;
-  border: 0px;
-  border-radius: 10px;
-  background-color: #0093b8;
+  border: none;
+  border-radius: 8px;
+  background-color: #0093b8; /* Matches "Add List" button color */
+  color: white;
 }
-
 
 /* Styling for each task item in the sidebar */
 .Sidebar .ListItem {
-    padding: 10px;
-    margin: 10px 0;
-    cursor: pointer;
-    background-color: #FFFFFF;
-    border-radius: 10px;
+  display: flex;
+  justify-content: space-between; /* Aligns items to each end of the container */
+  align-items: center;
+  padding: 10px;
+  margin: 10px 0;
+  cursor: pointer;
+  background-color: #ffffff; /* White background */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: background-color 0.3s ease;
 }
 
-.Sidebar .ListItem button {
-  margin-left: 10px;
-  padding: 5px 10px;
-  cursor: pointer;
-  border: 0px;
-  border-radius: 10px;
+.Sidebar .ListItem.today-active {
+  background-color: #68c273; /* Green for active today */
+  color: white;
+}
+
+.Sidebar .ListItem:hover {
+  background-color: #f5f5f5; /* Light gray on hover */
 }
 
 /* taskList.css */
 
 /* Overall styling for the task list container */
 .TaskList {
-    display: flex;
-    flex-grow: 2;
-    flex-direction: column;
-    padding: 20px;
-    background-color: #C6DCE4;
-    border-radius: 10px;
+  display: flex;
+  flex-grow: 2;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #ffffff; /* White background */
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
 .TaskList-Header {
@@ -85,65 +107,76 @@
 /* Styling for the h1 within the TaskList header */
 .TaskList-Header h1 {
   margin: 0; /* Remove default margin */
+  color: #333; /* Dark text color */
 }
 
 /* Styling for the button within the TaskList header */
 .TaskList-Header button {
   margin-left: 10px; /* Adjust as needed */
-  padding: 5px 10px;
+  padding: 8px 16px;
   cursor: pointer;
-  border: 0px;
-  border-radius: 10px;
-  background-color: #00B8A9;
+  border: none;
+  border-radius: 8px;
+  background-color: #00B8A9; /* TaskList button color */
+  color: white;
 }
-  
-  /* Styling for each task item */
-  .TaskList .TaskItem {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin: 10px 0;
-    background-color: #FFFFFF; /* Background color */
-    border-radius: 10px;
-    height: 10%;
-  }
-  
-  /* Styling for task title */
-  .TaskList .TaskItem span {
-    flex-grow: 1;
-    margin-right: 10px;
-  }
-  
 
-  .TaskList .TaskItem button {
-    margin-left: 10px;
-    padding: 5px 10px;
-    cursor: pointer;
-    border: 0px;
-    border-radius: 10px;
-  }
+/* Styling for each task item */
+.TaskList .TaskItem {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  margin: 10px 0;
+  background-color: #ffffff; /* White background */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
 
-  /* Styling for action buttons (Edit, Complete, Delete) */
-  .TaskItem .edit {
-    background-color:#C6DCE4;
-  }
+/* Styling for task title */
+.TaskList .TaskItem span {
+  flex-grow: 1;
+  margin-right: 10px;
+  color: #333; /* Dark text color */
+}
+
+.TaskList .TaskItem .due-date {
+  align-self: center;
+  color: blue; /* Default color */
+  padding-right: 10px;
+  margin: 0;
+}
+
+/* Styling for past due date */
+.TaskList .TaskItem.past-due .due-date {
+  color: red; /* Red color for past due date */
+}
 
 
-  .TaskItem .complete {
-    background-color:#99DDCC;
-  }
-
-  .TaskItem .delete {
-    background-color:#E23E57;
-  }
-    
-
+/* Styling for task icons */
 .task-icons {
-  font-size: 24px; 
+  align-self: center;
+  font-size: 20px; /* Adjust icon size */
+  margin-right: 5px;
   cursor: pointer;
+  color: #666; /* Dark gray icon color */
 }
 
+/* Styling for completed tasks */
 .TaskList .TaskItem.completed {
-  opacity: 0.5; 
+  opacity: 0.5; /* Reduced opacity for completed tasks */
+}
+
+.task-icons-container {
+  display: flex;
+  align-items: center;
+}
+
+.TaskList .completed-tasks {
+  margin-top: auto; /* Pushes the TaskList to the bottom */
+}
+
+.TaskList .CompletedTaskTitle{
+  margin-top: 10px;
+  cursor: pointer; /* Pushes the TaskList to the bottom */
+  text-decoration: underline;
 }
