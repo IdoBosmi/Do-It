@@ -45,9 +45,7 @@ app.use((0, express_session_1.default)({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge: 60 * 60 * 1000,
-        // sameSite: 'none',
-        // secure: true
+        maxAge: 60 * 60 * 1000
     },
     rolling: true,
     store: connect_mongo_1.default.create({ mongoUrl: process.env.MONGO_CONNECTION_STRING })
