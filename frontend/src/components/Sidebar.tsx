@@ -10,13 +10,14 @@ interface SidebarProps {
   onAddTaskListClick: () => void
   onDeleteSuccessful: (taskList:TaskListModel) => void
   onEditClick:(taskList:TaskListModel) => void
-  onCompletedSuccessful: (taskList:TaskListModel) => void
+  onTodayClick: () => void,
+  isTodayFilterOn: boolean
 }
 
-const Sidebar = ({ taskLists, onTaskListClick, onAddTaskListClick, onDeleteSuccessful, onEditClick, onCompletedSuccessful }:SidebarProps) => {
-
+const Sidebar = ({ taskLists, onTaskListClick, onAddTaskListClick, onDeleteSuccessful, onEditClick, onTodayClick, isTodayFilterOn}:SidebarProps) => {
 
   const [editMode, setEditMode] = useState<boolean>(false);
+  
 
   const onDeleteClick = async (taskListToDelete: TaskListModel) => {
     await TaskAPI.deleteTaskList(taskListToDelete._id);
@@ -31,8 +32,8 @@ const Sidebar = ({ taskLists, onTaskListClick, onAddTaskListClick, onDeleteSucce
         <button onClick={()=>setEditMode(!editMode)}>{editMode ? "Done" : "Edit lists"}</button>
       </div>
       
-      <div className="ListItem" key={"Today"} onClick={()=>onTaskListClick(null)}>
-          <span>Today</span>
+      <div className={`ListItem${isTodayFilterOn ? ' today-active' : ''}`} key={"Today"} onClick={onTodayClick}>
+        <span>Show Today's Tasks</span>
       </div>
       <div className="ListItem" key={"All"} onClick={()=>onTaskListClick(null)}>
         <span>All</span>
@@ -41,10 +42,11 @@ const Sidebar = ({ taskLists, onTaskListClick, onAddTaskListClick, onDeleteSucce
         <div className="ListItem" key={list._id} onClick={()=>onTaskListClick(list)}>
           <span>{list.title}</span>
           { editMode && 
-          <>
-          <FiEdit className='task-icons' onClick={() => onEditClick(list)}/>
-          <FaTrashCan className='task-icons' onClick={() => onDeleteClick(list)}/>
-          </>}
+          <div className="task-icons-container">
+            <FiEdit className='task-icons' onClick={() => onEditClick(list)}/>
+            <FaTrashCan className='task-icons' onClick={() => onDeleteClick(list)}/>
+          </div>
+          }
         </div>
       ))}
     </div>
