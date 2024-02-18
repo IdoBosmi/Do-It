@@ -3,6 +3,7 @@ import taskModel from "../models/task";
 import { isValidObjectId } from "mongoose";
 import createHttpError from "http-errors";
 import { assertIsDefined } from "../util/assertIsDefined";
+import * as GoogleController from "../controllers/google"
 
 
 export const getTasks: RequestHandler =  async (req, res, next) => {
@@ -56,7 +57,7 @@ export const createTask: RequestHandler = async (req, res, next) =>{
     
     const title =  req.body.title;
     const taskListId = req.body.taskListId;
-    const dueDate = req.body.dueDate;
+    let dueDate = req.body.dueDate;
     const authenticatedUserId = req.session.userId;
 
     try {
@@ -67,7 +68,15 @@ export const createTask: RequestHandler = async (req, res, next) =>{
         }
 
         //check if taskListId is ok
-
+        if (dueDate) {
+            // If dueDate is defined, set the time
+            dueDate = new Date(dueDate);
+            dueDate.setHours(9);
+            dueDate.setMinutes(0);
+        } else {
+            // If dueDate is not provided, you can handle it here, like setting a default value or throwing an error
+            throw createHttpError(400, "Due date is required for the task");
+        } 
         const newTask = await taskModel.create({
             userId: authenticatedUserId,
             title: title,
@@ -76,12 +85,13 @@ export const createTask: RequestHandler = async (req, res, next) =>{
             isCompleted: false
         });
 
+        await GoogleController.addTaskEvent(newTask, authenticatedUserId)
+
         res.status(201).json(newTask);
 
     } catch (error) {
         next(error);
     }
-
 
 }
 
@@ -155,7 +165,6 @@ export const deleteTask: RequestHandler = async (req, res, next) => {
         if(!task.userId.equals(authenticatedUserId)) {
             throw createHttpError(401, "You cannot access this task");
         }
-
 
         await task.deleteOne();
 
