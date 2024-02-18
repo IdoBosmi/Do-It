@@ -178,10 +178,9 @@ export async function updateTask(taskId: string, task: TaskInput): Promise<TaskM
 
 export async function getAuth(): Promise<TaskModel> {
     console.log("google")
-    const response = await fetchData("/auth/google" ,{
+    const response = await fetchData("/api/google" ,{
         method: "GET",
         credentials: 'include',
-        
     });
     return response.json();
 }
