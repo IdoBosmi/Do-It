@@ -2,6 +2,7 @@ import "dotenv/config";
 import express, {NextFunction, Request, Response, request} from "express";
 import tasksRoutes from "./routes/tasks";
 import userRoutes from "./routes/users";
+import googleRoutes from "./routes/google"
 import taskListsRoute from "./routes/taskLists";
 import morgan from "morgan";
 import createHttpError, {isHttpError} from "http-errors";
@@ -43,6 +44,7 @@ app.use(cors(corsOptions));
 app.use("/api/taskLists", taskListsRoute);
 app.use("/api/tasks", requireAuth, tasksRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/google", googleRoutes);
 
 app.use((req: Request, res: Response, next:NextFunction )=>{
     next(createHttpError(404,"Endpoint not found"));
