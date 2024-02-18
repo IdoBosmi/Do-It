@@ -1,12 +1,12 @@
 import {RequestHandler} from "express"
 import createHttpError from "http-errors";
 import {google, calendar_v3 } from "googleapis"
-import * as taskController from "../controllers/tasks"
 import { TaskInterface } from "../interfaces/task";
 import "dotenv/config";
 import taskModel from "../models/task"
-import { oauth2 } from "googleapis/build/src/apis/oauth2";
 import { assertIsDefined } from "../util/assertIsDefined";
+import UserModel from "../models/user";
+import { Types } from "mongoose";
 
 const REDIRECT_URL = process.env.GOOGLE_AUTH_REDIRECT_URL || "http://localhost:5000/api/google/callback"
 
@@ -16,19 +16,6 @@ const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_AUTH_CLIENT_SECERET,
     REDIRECT_URL
 )
-
-
-
-// // Define route for initiating OAuth 2.0 authentication
-// app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email', 'https://www.googleapis.com/auth/calendar'] }));
-
-// // Handle OAuth 2.0 callback
-// app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
-//     // Successful authentication, redirect to a success page or send a response
-//     res.redirect('/success');
-// });
-
-
 
 export const getAuth: RequestHandler = (req, res, next) =>{
     console.log("getauth")
@@ -51,8 +38,6 @@ interface EventRequest {
 export const initializeGoogleCalendarIntegration:RequestHandler = async (req, res, next) =>{
     
     const code = req.query.code as string;
-        
-
     try {
         const { tokens } = await oauth2Client.getToken(code);
         oauth2Client.setCredentials(tokens);
@@ -83,21 +68,26 @@ export const initializeGoogleCalendarIntegration:RequestHandler = async (req, re
         }
         const calendarId = calendarRes.data.id;
 
-        console.log("TASKS:")
-        console.log()
+        const refreshToken = tokens.refresh_token;
 
-
+        // Save the calendar ID and refresh token to the user's account
         const authenticatedUserId = req.session.userId;
         assertIsDefined(authenticatedUserId);
-        const tasks = await taskModel.find({userId: authenticatedUserId }).exec();
-        
 
-        console.log(tasks);
-        const filteredTasks = tasks.filter(item=> item.taskListId == "65d0d2c81fa2098083ad4af0")
-        console.log(filteredTasks)
+        const user = await UserModel.findById(authenticatedUserId).exec();
+        if (user) {
+            user.googleCalendarId = calendarId;
+            user.googleRefreshToken = refreshToken;
+            await user.save();
+            
+        } else {
+            throw createHttpError(404, "User not found");
+        }
+
+        const tasks = await taskModel.find({userId: authenticatedUserId }).exec();
 
         // Add tasks as events to the calendar
-        const eventRequests: EventRequest[] = filteredTasks.map(task=> {
+        const eventRequests: EventRequest[] = tasks.map(task=> {
             return {
                 calendarId: calendarId,
                 auth: oauth2Client,
@@ -121,5 +111,54 @@ export const initializeGoogleCalendarIntegration:RequestHandler = async (req, re
     } catch (error) {
         console.error('Error creating calendar and events:', error);
         res.status(500).send('Error creating calendar and events');
+    }
+}
+
+export const addTaskEvent = async (task:TaskInterface, userId:Types.ObjectId) => {
+
+    try {
+
+        const user = await UserModel.findById(userId).exec();
+        
+        if (!user || !user.googleCalendarId) {
+            return;
+        }
+
+        
+        // const { expiry_date } = oauth2Client.credentials;
+        // if (expiry_date && expiry_date < Date.now()) {
+        //     // Access token has expired, refresh it
+        //     try {
+        //         const { tokens } = await oauth2Client.refreshToken(user.googleRefreshToken);
+        //         oauth2Client.setCredentials(tokens);
+        //     } catch (refreshError) {
+        //         console.error('Error refreshing access token:', refreshError);
+        //         throw refreshError;
+        //     }
+        // }
+
+        const calendar = google.calendar({ version: 'v3', auth: process.env.GOOGLE_API_KEY });
+        const calendarId = user!.googleCalendarId;
+
+        if (calendarId) {
+            await calendar.events.insert({
+                calendarId: calendarId,
+                auth: oauth2Client,
+                requestBody: {
+                    summary: task.title,
+                    description: `Task ID: ${task._id}`,
+                    start: {
+                        dateTime: task.dueDate.toISOString(),
+                    },
+                    end: {
+                        dateTime: task.dueDate.toISOString(),
+                    }
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Error adding task event to calendar:', error);
+        // Handle error (e.g., log, send notification, etc.)
+        throw error;
     }
 }
