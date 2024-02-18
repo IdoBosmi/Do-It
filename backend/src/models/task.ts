@@ -19,6 +19,9 @@ const taskSchema = new Schema({
     isCompleted: {
         type: Boolean,
         required: true
+    },
+    googleCalendarEventId: {
+        type: String
     }
 }, { timestamps: true });
 
