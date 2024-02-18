@@ -8,5 +8,6 @@ export interface TaskInterface {
     createdAt: NativeDate,
     updatedAt: NativeDate,
     dueDate: Date,
-    isCompleted: boolean
+    isCompleted: boolean,
+    googleCalendarEventId?: string | null
 }
