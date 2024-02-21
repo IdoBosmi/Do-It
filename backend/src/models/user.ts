@@ -17,6 +17,15 @@ const userSchema = new Schema({
         required: true,
         select: false
     },
+    googleCalendarId: {
+        type: String
+    },
+    googleRefreshToken: {
+        type: String
+    },
+    googleWatchToken: {
+        type: String
+    }
 
 });
 

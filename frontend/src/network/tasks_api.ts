@@ -173,3 +173,22 @@ export async function updateTask(taskId: string, task: TaskInput): Promise<TaskM
     });
     return response.json();
 }
+
+// google calendar
+
+export async function getAuth(): Promise<void> {
+    console.log("google")
+    const response = await fetchData("/api/google" ,{
+        method: "GET",
+        credentials: 'include'
+    });
+
+    if (response.ok) {
+        // Extract the URL from the response
+        const { url } = await response.json();
+        // Redirect the user
+        window.location.href = url;
+    } else {
+        console.log(response.json)
+    }
+}

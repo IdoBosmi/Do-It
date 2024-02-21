@@ -13,10 +13,15 @@ const taskSchema = new Schema({
         type: String
     },
     dueDate: {
-        type: Date
+        type: Date,
+        required: true
     },
     isCompleted: {
-        type: Boolean
+        type: Boolean,
+        required: true
+    },
+    googleCalendarEventId: {
+        type: String
     }
 }, { timestamps: true });
 

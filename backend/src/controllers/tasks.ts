@@ -3,6 +3,7 @@ import taskModel from "../models/task";
 import { isValidObjectId } from "mongoose";
 import createHttpError from "http-errors";
 import { assertIsDefined } from "../util/assertIsDefined";
+import * as GoogleController from "../controllers/google"
 
 
 export const getTasks: RequestHandler =  async (req, res, next) => {
@@ -56,7 +57,7 @@ export const createTask: RequestHandler = async (req, res, next) =>{
     
     const title =  req.body.title;
     const taskListId = req.body.taskListId;
-    const dueDate = req.body.dueDate;
+    let dueDate = req.body.dueDate;
     const authenticatedUserId = req.session.userId;
 
     try {
@@ -67,7 +68,15 @@ export const createTask: RequestHandler = async (req, res, next) =>{
         }
 
         //check if taskListId is ok
-
+        if (dueDate) {
+            // If dueDate is defined, set the time
+            dueDate = new Date(dueDate);
+            dueDate.setHours(9);
+            dueDate.setMinutes(0);
+        } else {
+            // If dueDate is not provided, you can handle it here, like setting a default value or throwing an error
+            throw createHttpError(400, "Due date is required for the task");
+        } 
         const newTask = await taskModel.create({
             userId: authenticatedUserId,
             title: title,
@@ -76,12 +85,20 @@ export const createTask: RequestHandler = async (req, res, next) =>{
             isCompleted: false
         });
 
+        const eventId = await GoogleController.addTaskEvent(newTask, authenticatedUserId);
+
+        // Now you have access to the eventId and can handle it as needed
+        if (eventId) {
+            // Handle the eventId (e.g., store it in the task object, send it back to the client, etc.)
+            newTask.googleCalendarEventId = eventId;
+            await newTask.save();
+        }
+        
         res.status(201).json(newTask);
 
     } catch (error) {
         next(error);
     }
-
 
 }
 
@@ -92,7 +109,7 @@ export const updateTask: RequestHandler = async (req, res, next) =>{
     const title =  req.body.title;
     const taskListId = req.body.taskListId;
     const dueDate = req.body.dueDate;
-    const isCompleted = req.body.isCompleted;
+    const isCompleted = req.body.isCompleted || false;
     const authenticatedUserId = req.session.userId;
 
     try {
@@ -124,6 +141,8 @@ export const updateTask: RequestHandler = async (req, res, next) =>{
 
         const updatedTask = await task.save();
 
+        await GoogleController.editTaskEvent(updatedTask, authenticatedUserId);
+
         res.status(200).json(updatedTask);
 
     } catch (error) {
@@ -131,7 +150,6 @@ export const updateTask: RequestHandler = async (req, res, next) =>{
     }
 
 }
-
 
 export const deleteTask: RequestHandler = async (req, res, next) => {
     
@@ -156,8 +174,10 @@ export const deleteTask: RequestHandler = async (req, res, next) => {
             throw createHttpError(401, "You cannot access this task");
         }
 
+        await GoogleController.deleteTaskEvent(task,authenticatedUserId);
 
         await task.deleteOne();
+
 
         res.sendStatus(204);
     }
