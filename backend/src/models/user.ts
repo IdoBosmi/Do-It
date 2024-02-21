@@ -22,6 +22,9 @@ const userSchema = new Schema({
     },
     googleRefreshToken: {
         type: String
+    },
+    googleWatchToken: {
+        type: String
     }
 
 });
