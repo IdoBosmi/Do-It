@@ -176,11 +176,19 @@ export async function updateTask(taskId: string, task: TaskInput): Promise<TaskM
 
 // google calendar
 
-export async function getAuth(): Promise<TaskModel> {
+export async function getAuth(): Promise<void> {
     console.log("google")
     const response = await fetchData("/api/google" ,{
         method: "GET",
-        credentials: 'include',
+        credentials: 'include'
     });
-    return response.json();
+
+    if (response.ok) {
+        // Extract the URL from the response
+        const { url } = await response.json();
+        // Redirect the user
+        window.location.href = url;
+    } else {
+        console.log(response.json)
+    }
 }

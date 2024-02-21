@@ -18,13 +18,12 @@ const oauth2Client = new google.auth.OAuth2(
 )
 
 export const getAuth: RequestHandler = (req, res, next) =>{
-    console.log("getauth")
     const url = oauth2Client.generateAuthUrl({
         access_type: "offline",
         scope: ['profile', 'email', 'https://www.googleapis.com/auth/calendar']
     })
 
-    res.redirect(url)
+    res.json({ url });
 }
 
 
@@ -42,16 +41,14 @@ export const initializeGoogleCalendarIntegration:RequestHandler = async (req, re
         const { tokens } = await oauth2Client.getToken(code);
         oauth2Client.setCredentials(tokens);
         const accessToken = tokens.access_token;
-        console.log(tokens)
+        
 
         if (!accessToken){
             throw createHttpError(500, "No Acsees token")
         }
 
         const calendar = google.calendar({ version: 'v3', auth: process.env.GOOGLE_API_KEY});
-        console.log("calendar:")
-        console.log(calendar)
-        console.log()
+    
         // Create a new calendar for the user
         const calendarRes = await calendar.calendars.insert({
             auth: oauth2Client,
@@ -60,9 +57,7 @@ export const initializeGoogleCalendarIntegration:RequestHandler = async (req, re
             }
         });
 
-        console.log("calendar RES:")
-        console.log(calendarRes)
-        console.log()
+        
         if (!calendarRes.data.id){
             throw createHttpError(500, "Failed to crete Calender");
         }
@@ -123,26 +118,13 @@ export const initializeGoogleCalendarIntegration:RequestHandler = async (req, re
         const eventResponses = await Promise.all(eventPromises);
 
         console.log('Tasks added to calendar successfully');
-        res.status(200).send('Tasks added to calendar successfully');
+        const redirectUrl = process.env.FRONTEND_IP || "http://localhost:3000"
+        res.redirect(redirectUrl);
     } catch (error) {
         console.error('Error creating calendar and events:', error);
         res.status(500).send('Error creating calendar and events');
     }
 }
-
-const refreshToken = async () =>{
-    try {
-        // Refresh the access token
-        const { credentials } = await oauth2Client.refreshAccessToken();
-        // Update the user's access token in the database
-        oauth2Client.setCredentials(credentials);
-    } catch (error) {
-        // Handle token refresh errors
-        console.error('Error refreshing access token:', error);
-
-    }
-}
-
 
 
 //maybe auth??
@@ -271,4 +253,47 @@ export const deleteTaskEvent = async (task: TaskInterface, userId: Types.ObjectI
         console.error('Error editing task event in calendar:', error);
         throw error;
     }
+}
+
+
+
+export const onEventChange: RequestHandler =  async(req, res, next) =>{
+
+    try {
+
+        console.log(req)
+        // Verify the token included in the request payload
+        const { userId, token } = req.body;
+
+        // Fetch the user record from the database using the user ID
+        const user = await UserModel.findById(userId).exec();
+
+        // If the user record is not found, return an error
+        if (!user) {
+            throw createHttpError(404, 'User not found');
+        }
+
+        // Compare the token received in the request with the token stored in the user's record
+        if (user.googleWatchToken !== token) {
+            throw createHttpError(403, 'Invalid token');
+        }
+
+
+        // Process the event change notification
+        const { id, summary, start, end } = req.body;
+        console.log(`Received event change notification for event ID ${id}`);
+        console.log(`Summary: ${summary}`);
+        console.log(`Start time: ${start}`);
+        console.log(`End time: ${end}`);
+
+        // Additional processing logic goes here...
+
+        // Send a success response
+        res.status(200).json({ message: 'Event change notification processed successfully' });
+    } catch (error) {
+        console.error('Error handling event change notification:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+
+
 }
