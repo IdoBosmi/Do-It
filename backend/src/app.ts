@@ -44,7 +44,7 @@ app.use(cors(corsOptions));
 app.use("/api/taskLists", taskListsRoute);
 app.use("/api/tasks", requireAuth, tasksRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/google", googleRoutes);
+//app.use("/api/google", googleRoutes);
 
 app.use((req: Request, res: Response, next:NextFunction )=>{
     next(createHttpError(404,"Endpoint not found"));
