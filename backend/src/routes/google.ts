@@ -1,12 +1,12 @@
-// import express from 'express'
-// import * as GoogleController from '../controllers/google'
+import express from 'express'
+import * as GoogleController from '../controllers/google'
 
-// const router = express.Router();
+const router = express.Router();
 
-// router.get("/", GoogleController.getAuth);
+router.get("/", GoogleController.getAuth);
 
-// router.get("/callback", GoogleController.initializeGoogleCalendarIntegration);
+router.get("/callback", GoogleController.initializeGoogleCalendarIntegration);
 
-// router.post("/watch", GoogleController.onEventChange)
+router.post("/watch", GoogleController.onEventChange)
 
-// export default router;
+export default router;
